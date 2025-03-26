@@ -1,20 +1,38 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from "react";
+import { StyleSheet, SafeAreaView, StatusBar } from "react-native";
+import { GameProvider } from "./context/GameContext";
+import HomeScreen from "./screens/HomeScreen";
+import GameScreen from "./screens/GameScreen";
+import ResultScreen from "./screens/ResultScreen";
 
 export default function App() {
+  const [screenNum, setScreenNum] = useState(1);
+  let screen;
+
+  function changeScreenHandler(num) {
+    setScreenNum(num);
+  }
+
+  if (screenNum === 1) {
+    screen = <HomeScreen onScreenChange={changeScreenHandler} />;
+  } else if (screenNum === 2) {
+    screen = <GameScreen onScreenChange={changeScreenHandler} />;
+  } else if (screenNum === 3) {
+    screen = <ResultScreen onScreenChange={changeScreenHandler} />;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GameProvider>
+      <SafeAreaView style={styles.rootScreen}>
+        <StatusBar />
+        {screen}
+      </SafeAreaView>
+    </GameProvider>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  rootScreen: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
